@@ -1,0 +1,19 @@
+# kustomization.yaml contents
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - k8s/01_deployment.yaml
+  - k8s/02_service.yaml
+  - k8s/03_hpa.yaml
+
+#generators:
+#  - {pathOrUrl}
+#  - ...
+#
+#transformers:
+#  - {pathOrUrl}
+#  - ...
+#
+#validators:
+#  - {pathOrUrl}
+#  - ...

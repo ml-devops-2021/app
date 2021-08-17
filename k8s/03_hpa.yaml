@@ -1,0 +1,56 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: springboot
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: springboot
+  minReplicas: 2
+  maxReplicas: 100
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+        - type: Pods
+          value: 5
+          periodSeconds: 15
+      selectPolicy: Max
+  # behavior:
+  # For scaling down the stabilization window is 60 seconds (or the value of the --horizontal-pod-autoscaler-downscale-stabilization flag if provided).
+  # There is only a single policy for scaling down which allows a 100% of the currently running replicas to be removed which means
+  # the scaling target can be scaled down to the minimum allowed replicas.
+  # For scaling up there is no stabilization window. When the metrics indicate that the target should be scaled up the target is scaled up immediately.
+  # There are 2 policies where 3 pods or a 100% of the currently running replicas will be added every 15 seconds till the HPA reaches its steady state.
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+#  - type: Resource
+#    resource:
+#      name: memory
+#      target:
+#        type: AverageValue
+#        averageValue: 200Mi
+#  Uncomment these lines if you create the custom packets_per_second metric and
+#  configure your app to export the metric.
+#  - type: Pods
+#    pods:
+#      metric:
+#        name: packets_per_second
+#      target:
+#        type: AverageValue
+#        averageValue: 100

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot
+spec:
+  selector:
+    matchLabels:
+      app: springboot
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: springboot
+    spec:
+      containers:
+        - name: springboot
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+            limits:
+              cpu: 400m
+              memory: 250Mi
