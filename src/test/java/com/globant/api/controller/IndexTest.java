@@ -24,6 +24,6 @@ class IndexTest {
 
     @Test
     void PruebaFalse() {
-        assertFalse(false);
+        assertFalse(true);
     }
 }
